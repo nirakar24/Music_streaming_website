@@ -1,18 +1,20 @@
 from django.db import models
+from musics.helpers import get_audio_length
+from musics.validators import validate_is_audio
 
 class Music(models.Model):
     title=models.CharField(max_length=500)
     artist=models.CharField(max_length=500)
     album=models.ForeignKey('Album',on_delete=models.SET_NULL,null=True,blank=True)
     time_length=models.DecimalField(max_digits=20, decimal_places=2,blank=True)
-    audio_file=models.FileField(upload_to='musics/')
+    audio_file=models.FileField(upload_to='musics/', validators=[validate_is_audio])
     cover_image=models.ImageField(upload_to='music_images/')
 
     def save(self,*args, **kwargs):
         if not self.time_length:
             # logic for getting length of audio 
-            # audio_length=get_audio_length(self.audio_file)
-            # self.time_length =f'{audio_length:.2f}'
+            audio_length=get_audio_length(self.audio_file)
+            self.time_length =f'{audio_length:.2f}'
             pass
 
         return super().save(*args, **kwargs)

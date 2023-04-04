@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block Title %}
+{% load music_tags %}
 Spotify: The world of better music
 {% endblock Title %}
 
@@ -10,14 +11,16 @@ Spotify: The world of better music
 
   <div class="relative max-w-xl w-full h-36 bg-white rounded-lg shadow-lg overflow-hidde mb-32">
     <div class="absolute inset-0 rounded-lg overflow-hidden bg-red-200">
-      <img src="https://images.unsplash.com/photo-1499415479124-43c32433a620?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=889&q=80" alt="">
+      {% comment %} top {% endcomment %}
+      <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60" alt="">
       <div class="absolute inset-0 backdrop backdrop-blur-10 bg-gradient-to-b from-transparent to-black">
         
       </div>
     </div>
     <div class="absolute flex space-x-6 transform translate-x-6 translate-y-8">
       <div class="w-36 h-36 rounded-lg shadow-lg overflow-hidden">
-        <img class="music_img w-full object-cover" src="https://images.unsplash.com/photo-1488036106564-87ecb155bb15?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=375&q=80" alt="">
+        {% comment %} box {% endcomment %}
+        <img class="music_img w-full object-cover" src="https://images.unsplash.com/photo-1531651008558-ed1740375b39?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fHNvdW5kfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60" alt="">
       </div>
       <div class="text-white pt-12">
         <h3 class="font-bold">Album</h3>
@@ -34,8 +37,9 @@ Spotify: The world of better music
 
   <div class="max-w-xl bg-white rounded-lg shadow-lg overflow-hidden">
     <div class="relative">
+      {% comment %} main {% endcomment %}
       <img
-        src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+        src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60"
         class="object-cover">
       <div class="absolute p-4 inset-0 flex flex-col justify-end bg-gradient-to-b from-transparent to-gray-900 backdrop backdrop-blur-5 text-white">
         <h3 class="font-bold artist">Super Artist</h3>
@@ -70,22 +74,22 @@ Spotify: The world of better music
     </div>
     <ul class="text-xs sm:text-base divide-y border-t cursor-default audio-tracks">
       
-      
+      {% for musi in music %}
       <li class="flex items-center space-x-3 hover:bg-gray-100">
         <button class="p-3 hover:bg-green-500 group focus:outline-none play_single">
           <svg class="w-4 h-4 group-hover:text-white play_svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
         </button>
         <div class="flex-1">
-          Artist - Song Title
+          {{musi.artist}} - {{musi.title}}
         </div>
         <div class="text-xs text-gray-400">
-          Music Time
+          {{musi.time_length | time_formatter}}
         </div>
         <a href="#" class="focus:outline-none pr-4 group">
           <svg class="w-4 h-4 group-hover:text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"/></svg>
         </a>
       </li>
-      
+      {% endfor %}
       
     </ul>
   </div>
@@ -98,6 +102,80 @@ Spotify: The world of better music
 </a>
 <audio class="audio-player" preload="metadata" autoplay="false" src="/media/musics/2017-04-14_-_Happy_Dreams_-_David_Fesliyan.mp3"></audio>
 </div>
+
+{{music_list | json_script:'musics'}}
+
+<script>
+  const player=document.querySelector('.audio-player')
+  const play=document.querySelector('.playing')
+  const prev=document.querySelector('.prev')
+  const next=document.querySelector('.next')
+  const currentTime=document.querySelector('.currentDuration')
+  const duration=document.querySelector('.Duration')
+  const progress=document.querySelector('.progress')
+  const progress_container=document.querySelector('.progress_container')
+  const audio_tracks=document.querySelector('.audio-tracks')
+  const song_title=document.querySelector('.song-title')
+  const artist=document.querySelector('.artist')
+  const album=document.querySelector('.album')
+  const music_img=document.querySelector('.music_img')
+
+  // initilize music indexing
+  let musicIndex=0
+
+  //get music document from backend 
+  const musics=JSON.parse(document.getElementById('musics').textContent)
+
+// functions
+// loading a set detail of music in UI
+const setSRC=()=>{
+
+player.src=`/media/${musics[musicIndex].audio_file}`
+song_title.textContent=musics[musicIndex].title 
+artist.textContent=musics[musicIndex].artist 
+music_img.setAttribute('src',`media/${musics[musicIndex].cover_image}`)
+if (musics[musicIndex].album !== null){
+  album.textContent=musics[musicIndex].album
+}else{
+  album.textContent='Single'
+
+}
+
+}
+
+//determine player should play or not 
+const playOrPause=()=>{
+  if (player.paused){
+      player.play()
+      
+    }
+
+    else{
+      player.pause()
+
+    }
+}
+
+const formatTime=(secs)=>{
+  let min = Math.floor((secs % 3600) / 60); 
+  let sec = Math.floor(secs % 60)
+  if (sec<10){
+    sec=`0${sec}`
+  }
+
+  return `${min}:${sec}`
+}
+
+// load first music
+setSRC()
+player.pause()
+
+// when play is clicked 
+
+play.addEventListener('click',()=>{
+  playOrPause()
+})
+</script>
 
 {% endblock content %}
 
