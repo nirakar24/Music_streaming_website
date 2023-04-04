@@ -6,7 +6,7 @@ Spotify: The world of better music
 
 
 {% block content %}
-<div class=" flex items-center justify-center py-12 relative" style="background: #edf2f7; ">
+<div class=" flex items-center justify-center py-12 relative" style="background: #e9ecef; ">
     <div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
 
   <div class="relative max-w-xl w-full h-36 bg-white rounded-lg shadow-lg overflow-hidde mb-32">
@@ -23,13 +23,13 @@ Spotify: The world of better music
         <img class="music_img w-full object-cover" src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60" alt="">
       </div>
       <div class="text-white pt-12">
-        <h3 class="font-bold">Album</h3>
+        <h3 class="font-bold">Enjoy your music</h3>
         <div class="text-sm opacity-60 album">Super Interpret</div>
         <div class="mt-8 text-gray-400">
-          <div class="flex items-center space-x-2 text-xs">
+          <!-- <div class="flex items-center space-x-2 text-xs">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
             <span>Easy listening</span>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -133,7 +133,7 @@ const setSRC=()=>{
 player.src=`/media/${musics[musicIndex].audio_file}`
 song_title.textContent=musics[musicIndex].title 
 artist.textContent=musics[musicIndex].artist 
-music_img.setAttribute('src',`media/${musics[musicIndex].cover_image}`)
+// music_img.setAttribute('src',`media/${musics[musicIndex].cover_image}`)
 if (musics[musicIndex].album !== null){
   album.textContent=musics[musicIndex].album
 }else{
@@ -220,6 +220,60 @@ prev.addEventListener('click',()=>{
   setSRC()
 
   playOrPause()
+})
+
+// when an audio is chosen from the song tracks
+audio_tracks.addEventListener('click',e=>{
+  if((e.target.nodeName=='BUTTON' && e.target.classList.contains('play_single'))||
+  (e.target.nodeName=='svg'&&e.target.classList.contains('play_svg'))){
+    let parent_cont
+    
+    if (e.target.nodeName=='BUTTON'){
+      parent_cont=e.target.parentNode
+    }
+    else{
+        parent_cont=e.target.parentNode.parentNode
+    }
+    const newIndex=Array.from(audio_tracks.querySelectorAll('li')).indexOf(parent_cont)
+    
+    if (newIndex==musicIndex){
+      if(player.paused){
+        
+        player.play()
+      }else{
+        
+        player.pause()
+      }
+    }else{
+
+      musicIndex=newIndex
+      setSRC()
+      player.play()
+    }
+  
+  }
+})
+
+//when a progress bar is clicked to change music timer 
+progress_container.addEventListener('click',(e)=>{
+  const click_percentage=(e.offsetX/progress_container.offsetWidth)*100
+  // console.log(click_percentage)
+  const audio_played=(click_percentage/100)*player.duration
+  // console.log(audio_played)
+  let plaing
+  if (player.paused){
+      playing=false 
+  }
+  else{
+      playing=true  
+  }
+  player.currentTime=audio_played
+  
+  if(playing==false){
+    player.pause()
+  }
+  
+
 })
 </script>
 
