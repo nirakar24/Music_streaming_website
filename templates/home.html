@@ -20,7 +20,7 @@ Spotify: The world of better music
     <div class="absolute flex space-x-6 transform translate-x-6 translate-y-8">
       <div class="w-36 h-36 rounded-lg shadow-lg overflow-hidden">
         {% comment %} box {% endcomment %}
-        <img class="music_img w-full object-cover" src="https://images.unsplash.com/photo-1531651008558-ed1740375b39?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fHNvdW5kfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60" alt="">
+        <img class="music_img w-full object-cover" src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60" alt="">
       </div>
       <div class="text-white pt-12">
         <h3 class="font-bold">Album</h3>
@@ -173,6 +173,52 @@ player.pause()
 // when play is clicked 
 
 play.addEventListener('click',()=>{
+  playOrPause()
+})
+
+// duration 
+player.addEventListener('loadedmetadata',()=>{
+  duration.textContent=formatTime(player.duration)
+})
+
+// Progress 
+player.addEventListener('timeupdate',e=>{
+  let secs=player.currentTime 
+  let total=player.duration
+
+  currentTime.textContent=formatTime(player.currentTime)
+
+  let progress_container_width=progress_container.offsetWidth
+  let progress_width=progress.offsetWidth
+
+  let audio_played=(secs/total)*100
+  let newWidth = progress_container_width*(audio_played/100)
+
+  progress.style.width=`${newWidth}px`
+
+})
+
+next.addEventListener('click',()=>{
+  musicIndex=musicIndex+1
+  
+  if(musicIndex>musics.length-1){
+    musicIndex=0
+  }
+
+  setSRC()
+
+  playOrPause()
+
+})
+
+prev.addEventListener('click',()=>{
+  musicIndex=musicIndex-1
+  if(musicIndex<0){
+    musicIndex=musics.length-1
+  }
+
+  setSRC()
+
   playOrPause()
 })
 </script>
