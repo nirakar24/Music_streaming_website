@@ -1,5 +1,6 @@
-from django.shortcuts import  render
-from .models import Music
+from django.shortcuts import  render, redirect
+from .models import Music, Album
+from .form import AddMusicForm
 
 def homePage(request):
     music=Music.objects.all()
@@ -10,25 +11,25 @@ def homePage(request):
     })
 
 def addMusic(request):
-    # form=AddMusicForm()
+    form=AddMusicForm()
 
-    # if request.POST:
-    #     form=AddMusicForm(request.POST,request.FILES)
+    if request.POST:
+        form=AddMusicForm(request.POST,request.FILES)
      
-    #     if form.is_valid():
-    #         instance=form.save(commit=False)
-    #         album=form.cleaned_data.get('album')
-    #         if album:
-    #             music_album=Album.objects.get_or_create(name=album)
-    #             print(music_album)
-    #             instance.album=music_album[0]
-    #             instance.save()
-    #             return redirect("music:home_page")
-    #         else:
-    #             instance.save()
-    #             return redirect("music:home_page")
+        if form.is_valid():
+            instance=form.save(commit=False)
+            album=form.cleaned_data.get('album')
+            if album:
+                music_album=Album.objects.get_or_create(name=album)
+                print(music_album)
+                instance.album=music_album[0]
+                instance.save()
+                return redirect("music:home_page")
+            else:
+                instance.save()
+                return redirect("music:home_page")
 
-    #     else:
-    #         print("no",form.data)
+        else:
+            print("no",form.data)
     
     return render(request,'addPage.html')

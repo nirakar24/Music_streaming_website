@@ -6,7 +6,7 @@ Sound: The world of better music
 
 
 {% block content %}
-<div class=" flex items-center justify-center py-12 relative" style="background: #090526; ">
+<div class=" flex items-center justify-center py-12 relative" style="background: #090526;">
     <div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center" style="background-color:#180559;">
 
   <div class="relative max-w-xl w-full h-36 bg-white rounded-lg shadow-lg overflow-hidde mb-32">
@@ -58,13 +58,13 @@ Sound: The world of better music
         0:00
       </div>
       <div class="flex space-x-3 p-2">
-        <button class="focus:outline-none hover:bg-gray-200 prev">
+        <button class="focus:outline-none hover:bg-purple-200 prev">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
         </button>
-        <button class="rounded-full w-8 h-8 flex hover:bg-gray-200 items-center justify-center pl-0.5 ring-2 ring-gray-100 focus:outline-none playing">
+        <button class="rounded-full w-8 h-8 flex hover:bg-purple-200 items-center justify-center pl-0.5 ring-2 ring-gray-100 focus:outline-none playing">
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
         </button>
-        <button class="focus:outline-none hover:bg-gray-200 next">
+        <button class="focus:outline-none hover:bg-purple-200 next">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
         </button>
       </div>
@@ -76,7 +76,7 @@ Sound: The world of better music
       
       {% for musi in music %}
       <li class="flex items-center space-x-3 hover:bg-purple-100" >
-        <button class="p-3 hover:bg-green-500 group focus:outline-none play_single">
+        <button class="p-3 hover:bg-purple-500 group focus:outline-none play_single">
           <svg class="w-4 h-4 group-hover:text-white play_svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
         </button>
         <div class="flex-1">
