@@ -1,4 +1,4 @@
-# Sound Oasis - Music Streamin Website
+# Sound Oasis - Music Streaming Website
 Sound Oasis is a Django-based music streaming website that allows users to discover and listen to their favorite music. The website is deployed on Amazon AWS and can be accessed via the domain "sound-oasis.studio"<hr><hr>
 
  ## Features<hr>
